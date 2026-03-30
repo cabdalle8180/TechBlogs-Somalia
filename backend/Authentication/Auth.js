@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
+import { generateTokenAndCookies } from "../Utils/token.js";
 export const register = async (req, res) =>{
     const  {username, email, password} = req.body;
 
@@ -35,11 +36,12 @@ export const register = async (req, res) =>{
     try {
         if (newUser){
             await newUser.save();
+            generateTokenAndCookies(newUser._id, res);
         res.status(201).json({ message: "User registered successfully",
             _id: newUser._id,
             username: newUser.username,
             email: newUser.email,
-            // Todo: generate token and set cookie;
+            
          });
 
         }

@@ -2,9 +2,11 @@ import express from "express"
 import dotenv from "dotenv";
 import ConnectendDBs from "./config/dbs.js";
 import authRoutes from "./routes/authroutes.js";
+import cookieParser from "cookie-parser";
 const server = express();
 dotenv.config()
 server.use(express.json())
+server.use(cookieParser())
 // routes
 server.get('/',(req,res)=>{
     res.status(200).send("welcome")})
