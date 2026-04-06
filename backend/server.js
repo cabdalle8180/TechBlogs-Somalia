@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import ConnectendDBs from "./config/dbs.js";
 import authRoutes from "./routes/authroutes.js";
 import cookieParser from "cookie-parser";
+import postRoutes from "./routes/Postroutes.js";
 const server = express();
 dotenv.config()
 server.use(express.json())
 server.use(cookieParser())
 // routes
+server.use("/api/posts",postRoutes)
 server.get('/',(req,res)=>{
     res.status(200).send("welcome")})
 server.use("/api/auth",authRoutes)
