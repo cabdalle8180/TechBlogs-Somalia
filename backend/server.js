@@ -4,6 +4,14 @@ import ConnectendDBs from "./config/dbs.js";
 import authRoutes from "./routes/authroutes.js";
 import cookieParser from "cookie-parser";
 import postRoutes from "./routes/Postroutes.js";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+    cloud_name: process.env.cloudinary_cloud_name,
+    api_key: process.env.cloudinary_api_key,
+    api_secret: process.env.cloudinary_api_secret
+})
+
 const server = express();
 dotenv.config()
 server.use(express.json())
