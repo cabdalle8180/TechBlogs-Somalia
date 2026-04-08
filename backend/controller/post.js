@@ -33,11 +33,68 @@ export const createPost = async (req,res) => {
     }
 }
 // gell all posts
-export const getAllPosts = async (req,res) => {}
+export const getAllPosts = async (req,res) => {
+    try {
+        const posts  = await Post.find().sort({ createdAt: -1}).populate({ path: "author", select: "-password" })
+
+        if (posts.length === 0 ){
+            return res.status(404).json ({
+                message : "No posts found"
+            })
+        }
+        res.status(200).json({ posts });
+
+    } catch (error) {
+        console.error(`Error fetching all posts: ${error.message}`);
+        res.status(500).json({ message: "Server error" });
+    }
+}
 // get single post
-export const getPostById = async (req,res) => {}
+export const getPostById = async (req,res) => {
+    try {
+        const postid = await Post.findById(req.params.id).populate({ path: "author", select: "-password" })
+        if (postid.length === 0){
+            return res.status(404).json({message: "Post not found"})
+        }
+        res.status(200).json({ post: postid });
+    } catch (error) {
+        console.error(`Error fetching post by ID: ${error.message}`);
+        res.status(500).json({ message: "Server error" });
+    }
+}
 // update post
-export const updatePost = async (req,res) => {}
+export const updatePost = async (req,res) => {
+    try {
+        const { title, content,image } = req.body;
+
+        const id = req.params.id;
+        const userId = req.user._id.toString();
+
+        const post= await Post.findById(id);
+        if (!post){
+            return res.status(404).json({ message: "Post not found" });
+        }
+        if (post.author.toString() !== userId) {
+            return res.status(403).json({ message: "You are not the author of this post" });
+        }
+        if (!title && !content && !image) {
+            return res.status(400).json({ message: "At least one of Title, content, or image is required" });
+        }
+        // image update cloudinary
+        if (image && image !== post.image) {
+            const uploadimage = await cloudinary.uploader.upload(image)
+            image = uploadimage.secure_url
+        }
+        const updatedPost = await Post.findByIdAndUpdate(id, {title, content, image}, { new: true, runValidators: true });
+        
+
+        // await updatedPost.save();
+        res.status(200).json({ message: "Post updated successfully", post: updatedPost });
+    } catch (error) {
+        console.error(`Error updating post: ${error.message}`);
+        res.status(500).json({ message: "Server error" });
+    }
+}
 // delete post
 export const deletePost = async (req,res) => {}
 // get user posts
