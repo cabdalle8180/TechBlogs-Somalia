@@ -96,6 +96,46 @@ export const updatePost = async (req,res) => {
     }
 }
 // delete post
-export const deletePost = async (req,res) => {}
+export const deletePost = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user._id.toString();
+        const post = await Post.findById(id)
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        if (post.author.toString() !== userId){
+            return res.status(403).json({ message: "You are not the author of this post" });
+        }
+
+        // image delete from cloudinary
+        if (post.image) {
+            const imageId = post.image.split("/").pop().split(".")[0]
+            await cloudinary.uploader.destroy(imageId)
+        }
+
+        await Post.findByIdAndDelete(id);
+        res.status(200).json({ message: "Post deleted successfully" });
+    } catch (error) {
+        console.error(`Error deleting post: ${error.message}`);
+        res.status(500).json({ message: "Server error" });
+    }
+}
 // get user posts
-export const getUserPosts = async (req,res) => {}
+export const getUserPosts = async (req,res) => {
+    try {
+        const { username } = req.params;
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const post = await Post.find({ author: user._id}).sort({ createdAt: -1}).populate({ path: "author", select: "-password" });
+        res.status(200).json({ posts: post });
+
+    } catch (error) {
+        console.error(`Error fetching user posts: ${error.message}`);
+        res.status(500).json({ message: "Server error" });
+    }
+}
