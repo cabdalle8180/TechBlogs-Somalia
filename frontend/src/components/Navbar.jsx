@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { RiCloseLargeFill } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const styles = {
@@ -14,35 +15,36 @@ function Navbar() {
 
             <ul className='hidden md:flex space-x-4 '>
                 <li>
-                    <a href="#" className={styles.link}>Home</a>
+                    <Link to="/" className={styles.link}>Home</Link>
                 </li>
                 <li>
-                    <a href="#" className={styles.link}>Blogs</a>
+                    <Link to="/blogs" className={styles.link}>Blogs</Link>
                 </li>
                 <li>
-                    <a href="#" className={styles.link}>Contact</a>
+                    <Link to="/contact" className={styles.link}>Contact</Link>
                 </li>
                 <li>
-                    <a href="#" className={styles.link}>Signin</a>
+                    <Link to="/signin" className={styles.link}>Signin</Link>
                 </li>
             </ul>
             <button className='md:hidden' onClick={() => setIsMenuOpen(!isMenuOpen)}>
                {isMenuOpen ? <RiCloseLargeFill size={20} /> : <GiHamburgerMenu size={20} />}
             </button>
         </div>
+        <Link></Link>
         {/* mobile menu screen */}
            {isMenuOpen && ( <ul className='md:hidden flex flex-col space-y-2 mt-4 text-center '>
                 <li>
-                    <a href="#" className= {`${styles.link} block`}>Home</a>
+                    <Link to="/" className={`${styles.link} block`}>Home</Link>
                 </li>
                 <li>
-                    <a href="#" className= {`${styles.link} block`}>Blogs</a>
+                    <Link to="/blogs" className={`${styles.link} block`}>Blogs</Link>
                 </li>
                 <li>
-                    <a href="#" className= {`${styles.link} block`}>Contact</a>
+                    <Link to="/contact" className={`${styles.link} block`}>Contact</Link>
                 </li>
                 <li>
-                    <a href="#" className= {`${styles.link} block`}>Signin</a>
+                    <Link to="/signin" className={`${styles.link} block`}>Signin</Link>
                 </li>
             </ul>)}
     </nav>
