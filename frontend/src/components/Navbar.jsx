@@ -9,7 +9,7 @@ function Navbar() {
         link: "hover:bg-white hover:text-slate-800 px-3 py-2 rounded-md transition-colors duration-300"
     }
   return (
-    <nav className='bg-slate-800 p-3 text-white selection-none sticky top-0'>
+    <nav className='bg-slate-900 p-3 text-white selection-none sticky top-0 fixed '>
         <div className='flex justify-between items-center mx-auto container'>
             <h1 className='text-xl md:text-3xl font-semibold'>Tech Blog</h1>
 

@@ -121,7 +121,7 @@ function Signin() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 overflow-hidden">
+    <div className="flex  items-center justify-center mt-5 px-4 ">
       <Card className="w-full max-w-md border-slate-800 bg-slate-900 shadow-2xl rounded-2xl">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl font-bold tracking-tight text-white">
