@@ -12,7 +12,7 @@ import PostList from './pages/PostList'
 import CreatePost from './pages/CreatePost'
 import BlogPost from './pages/BlogPost'
 function App() {
-const CurrenUser= true;
+const CurrenUser= false;
   return (
     <div>
       <Navbar/>
