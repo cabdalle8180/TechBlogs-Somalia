@@ -13,9 +13,11 @@ import {
   RiEyeLine,
   RiEyeOffLine,
 } from "react-icons/ri";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/api/userSlice";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 function Signin() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -23,12 +25,25 @@ function Signin() {
     username: "",
     password: "",
   });
-  
+    // const { status, error } = useSelector((state) => state.user);
+    const { status, error } = useSelector((state) => state.user || {});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(login(formData));
   }
-  
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      toast.success("Login successful 🎉");
+    }
+
+    if (status === "failed") {
+      toast.error(error || "Login failed ❌");
+    }
+    
+  }, [status]);
+
   return (
     <div className="flex  items-center justify-center mt-5 px-4 ">
       <Card className="w-full max-w-md border-slate-800 bg-slate-900 shadow-2xl rounded-2xl">
@@ -111,15 +126,17 @@ function Signin() {
             </button>
 
             {/* Footer */}
-            <p className="text-center text-xs text-slate-400 pt-2">
+             <Link to="/signup">
+           <p className="text-center text-xs text-slate-400 pt-2">
               Don&apos;t have an account?{" "}
               <button
                 type="button"
                 className="text-blue-400 hover:text-blue-300 font-medium transition"
               >
-                Create one
+                Create Account
               </button>
             </p>
+           </Link>
           </form>
         </CardContent>
       </Card>
