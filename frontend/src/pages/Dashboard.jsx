@@ -1,12 +1,15 @@
 import { Outlet } from "react-router-dom";
-
+import Sidebar from "../components/Sidebar";
 function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-
+    <div className="flex relative">
+      <div>
+        <Sidebar/>
+      </div>
       {/* THIS IS REQUIRED */}
-      <Outlet />
+      <div className="flex-1 p-8">  
+        <Outlet />
+      </div>
     </div>
   );
 }
