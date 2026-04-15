@@ -13,9 +13,12 @@ import CreatePost from './pages/CreatePost'
 import BlogPost from './pages/BlogPost'
 import Footer from './components/footer'
 import {ToastContainer} from "react-toastify"
+import { useSelector } from 'react-redux'
 
 function App() {
-  const CurrenUser = false;
+  const currentUser = useSelector((state)=> state.currentUser);
+  console.log(currentUser);
+  
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -33,12 +36,12 @@ function App() {
 
           <Route
             path='/signin'
-            element={CurrenUser ? <Navigate to="/dashboard" /> : <Signin />}
+            element={currentUser ? <Navigate to="/dashboard" /> : <Signin />}
           />
 
           <Route
             path='/signup'
-            element={CurrenUser ? <Navigate to="/dashboard" /> : <Signup />}
+            element={currentUser ? <Navigate to="/dashboard" /> : <Signup />}
           />
 
           <Route path="/dashboard" element={<Dashboard />}>
