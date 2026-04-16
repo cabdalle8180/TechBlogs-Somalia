@@ -7,7 +7,7 @@ import { TbLogs } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 
 function Sidebar() {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const logout = () => {
         alert("Logout successful");
