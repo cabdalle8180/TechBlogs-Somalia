@@ -12,7 +12,7 @@ function Sidebar() {
     const logout = () => {
         alert("Logout successful");
     };
-
+    
     const menuItems = [
         { name: "Dashboard", icon: <FaHome size={22}/>, path: "/dashboard" },
         { name: "Posts", icon: <TbLogs size={22}/>, path: "/dashboard/posts" },

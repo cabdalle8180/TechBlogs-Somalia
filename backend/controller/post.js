@@ -133,6 +133,7 @@ export const getUserPosts = async (req,res) => {
 
         const post = await Post.find({ author: user._id}).sort({ createdAt: -1}).populate({ path: "author", select: "-password" });
         res.status(200).json({ posts: post });
+        // res.status(200).json({  post });
 
     } catch (error) {
         console.error(`Error fetching user posts: ${error.message}`);

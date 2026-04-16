@@ -1,19 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { FaEdit } from 'react-icons/fa'
 import { TbTrash } from 'react-icons/tb'
 import { Link } from 'react-router-dom'
-
+import { useSelector } from 'react-redux'
+import moment from 'moment'
 function PostList() {
+  const currentUser = useSelector((state)=> state.currentUser);
+  const [posts , setposts] = useState([])  
+console.log(posts);
+
+  useEffect(()=>{
+    const fethpost = async ()=>{
+      const res = await fetch(`/api/posts/user/${currentUser.username}`)
+      const data= await res.json()
+      setposts(data.posts || [])
+    }
+    fethpost()
+  },[currentUser])
+  if (posts.length <1 ) return <p>Loading</p>
   return (
     <div className='space-y-4'>
        <h1 className='text-2xl font-semibold text-slate-800 hidden md:block'>Posts</h1>
-
-       <div className='space-y-4'>
+       {posts.map((post) =>(
+<div className='space-y-4'>
+        
         <div  className='p-4 hover:bg-slate-400 border-blue-900 transition-colors border-r border-l flex gap-4 items-center justify-between'>
           <div className='flex-1'>
-            <h3 className='text-xl font-semibold'>post list </h3>
-            <p className='text-slate-500'>publish on 10/10/2026</p>
+            <h3 className='text-xl font-semibold'>{post.title} </h3>
+            <p className='text-slate-500'>publish on {moment(post.createdAt).format("d-mm-yy")} </p>
           </div>
           {/* desktop  */}
           <div className='hidden md:flex gap-2'>
@@ -47,6 +62,8 @@ function PostList() {
           </div>
         </div>
        </div>
+       ))}
+       
     </div>
   )
 }
