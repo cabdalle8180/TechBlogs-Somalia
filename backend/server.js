@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/Authroutes.js";
 import postRoutes from "./routes/Postroutes.js";
 import { v2 as cloudinary } from "cloudinary";
-
+import userRoutes from "./routes/userRoutes.js";
 dotenv.config()
 
 cloudinary.config({
@@ -22,6 +22,7 @@ server.use("/api/posts",postRoutes)
 server.get('/',(req,res)=>{
     res.status(200).send("welcome")})
 server.use("/api/auth",authRoutes)
+server.use("/api/users",userRoutes)
 
 
 // database connection

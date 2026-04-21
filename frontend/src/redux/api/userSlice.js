@@ -35,14 +35,80 @@ export const login = createAsyncThunk("user/login", async (userInfo, { rejectWit
 });
 
 // 3. Logout Action
-export const logout = createAsyncThunk("user/logout", async (_, { rejectWithValue }) => {
+export const logout = createAsyncThunk("user/logout", async (userInfo, { rejectWithValue }) => {
     try {
         const response = await fetch("/api/auth/logout", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             credentials: "include",
+            body: JSON.stringify(userInfo)
         });
         const data = await response.json().catch(() => ({}));
+
         if (!response.ok) return rejectWithValue(data || { message: "Logout failed" });
+
+        return data;
+
+    } catch (error) {
+        return rejectWithValue({ message: error.message });
+    }
+});
+
+// getUserProfile
+
+export const getUserProfile = createAsyncThunk("user/getUserProfile", async (_, { rejectWithValue }) => {
+    try {
+        const res = await fetch("/api/users/getUserProfile", {
+            method: "GET",
+            credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) return rejectWithValue(data || { message: "Failed to fetch user profile" });
+        return data;
+    } catch (error) {
+        return rejectWithValue({ message: error.message });
+    }
+
+})
+
+// updateUserProfile
+export const updateUserProfile = createAsyncThunk(
+  "user/updateUserProfile",
+  async (userInfo, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/users/updateUserProfile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(userInfo), // ✅ FIXED
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return rejectWithValue(data || { message: "Failed to update profile" });
+      }
+
+      return data;
+
+    } catch (error) {
+      return rejectWithValue({ message: error.message });
+    }
+  }
+);
+
+
+// getAllUsers
+export const getAllUsers = createAsyncThunk("user/getAllUsers", async (userInfo, { rejectWithValue }) => {
+    try {
+        const res = await fetch("/api/users/getAllUsers", {
+            method: "GET",
+            credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) return rejectWithValue(data || { message: "Failed to fetch users" });
         return data;
     } catch (error) {
         return rejectWithValue({ message: error.message });
@@ -87,9 +153,9 @@ export const userslice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.currentUser = action.payload;
+                state.currentUser = action.payload.data;
                 state.error = null;
-                localStorage.setItem("currentUser", JSON.stringify(action.payload));
+                localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = "failed";
@@ -103,9 +169,9 @@ export const userslice = createSlice({
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.currentUser = action.payload;
+                state.currentUser = action.payload.data;
                 state.error = null;
-                localStorage.setItem("currentUser", JSON.stringify(action.payload));
+                localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
             })
             .addCase(register.rejected, (state, action) => {
                 state.status = "failed";
@@ -122,10 +188,83 @@ export const userslice = createSlice({
             .addCase(logout.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.payload?.message || "Logout failed";
+            })
+            // getUserProfile
+            .addCase(getUserProfile.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getUserProfile.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.currentUser = action.payload.data; // Hubi in data.user yahay user-ka saxda ah
+                state.error = null;
+                localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
+            })
+            .addCase(getUserProfile.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload?.message || "Failed to fetch user profile";
+            })
+            // updateUserProfile
+            .addCase(updateUserProfile.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(updateUserProfile.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.currentUser = action.payload.data;
+                state.error = null;
+                localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
+            })
+            .addCase(updateUserProfile.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload?.message || "Failed to update user profile";
+            })
+            // getAllUsers
+            .addCase(getAllUsers.pending, (state) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllUsers.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.error = null;
+            })
+            .addCase(getAllUsers.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.payload?.message || "Failed to fetch users";
             });
-    }
+
+        }
 });
 
 // Soo saar (export) resetStatus si aad ugu isticmaasho Signin.jsx
 export const { resetStatus } = userslice.actions;
 export default userslice.reducer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

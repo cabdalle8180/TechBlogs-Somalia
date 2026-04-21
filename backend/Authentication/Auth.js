@@ -45,12 +45,34 @@ export const register = async (req, res) =>{
         if (newUser){
             await newUser.save();
             generateTokenAndCookies(newUser._id, res);
-        res.status(201).json({ message: "User registered successfully",
-            _id: newUser._id,
-            username: newUser.username,
-            email: newUser.email,
+        // res.status(201).json({ message: "User registered successfully",
+        //     _id: newUser._id,
+        //     username: newUser.username,
+        //     email: newUser.email,
             
-         });
+        //  });
+
+//  res.status(201).json({
+//   success: true,
+//   data: {
+//     _id: newUser._id,
+//     username: newUser.username,
+//     email: newUser.email,
+//      isAdmin: user.isAdmin,
+//     isActived: user.isActived,
+//   }
+// });
+
+res.status(201).json({
+  success: true,
+  data: {
+    _id: newUser._id,
+    username: newUser.username,
+    email: newUser.email,
+    isAdmin: newUser.isAdmin,
+    isActive: newUser.isActive,
+  }
+});
 
         }
         else {
@@ -88,25 +110,67 @@ export const login = async (req,res) =>{
         }
 
         generateTokenAndCookies(user._id, res);
-        res.status(200).json({ message: "Login successful",
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-         });
-         
+        // res.status(200).json({ message: "Login successful",
+        //     data:{
+        //     _id: user._id,
+        //     username: user.username,
+        //     email: user.email,
+        //     }
+        //  });
+//          res.status(200).json({
+//   success: true,
+//   data: {
+//     _id: user._id,
+//     username: user.username,
+//     email: user.email,
+//     isAdmin: user.isAdmin,
+//     isActived: user.isActived,
+//   }
+// });
+
+res.status(200).json({
+  success: true,
+  data: {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    isActive: user.isActive,
+  }
+});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
     }
 }
 
-export const logout = (req,res) =>{
-    try {
-        res.clearCookie("access_token");
-        res.status(200).json({ message: "Logout successful" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+// export const logout = (req,res) =>{
+//     try {
+//         res.clearCookie("access_token");
+//         res.status(200).json({ message: "Logout successful" });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Server error" });
 
-    }
-}
+//     }
+// }
+
+
+export const logout = (req, res) => {
+  try {
+    res.clearCookie("access_token");
+
+    res.status(200).json({
+      success: true,
+      data: null,
+      message: "Logout successful"
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
