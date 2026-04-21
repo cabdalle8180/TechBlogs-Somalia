@@ -2,26 +2,34 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { generateTokenAndCookies } from "../Utils/token.js";
 export const register = async (req, res) =>{
-    const  {username, email, password} = req.body;
+    const  {name, username, email, password} = req.body;
+    const resolvedUsername = (typeof name === "string" && name.trim())
+      ? name.trim()
+      : (typeof username === "string" ? username.trim() : "");
 
-    if (!username || !email || !password) {
+    // #region agent log
+    fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H1',location:'backend/Authentication/Auth.js:register',message:'register attempt',data:{hasName:!!name,hasUsername:!!username,hasEmail:!!email,hasPassword:!!password},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
+    if (!resolvedUsername || !email || !password) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
     // check email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const normalizedEmail = String(email).trim().toLowerCase();
+    if (!emailRegex.test(normalizedEmail)) {
         return res.status(400).json({ message: "Invalid email format" });
     }
 
     // check email already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
     if (existingUser) {
         return res.status(400).json({ message: "email already exists"})
     }
 
-    const existingUsername = await User.findOne({ username });
+    const existingUsername = await User.findOne({ username: resolvedUsername });
 
     if (existingUsername) {
         return res.status(400).json({ message: "Username already exists" });
@@ -30,7 +38,7 @@ export const register = async (req, res) =>{
         return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
     const hassedPassword = await bcrypt.hash(password, 12);
-    const newUser = new User({ username, email, password: hassedPassword });
+    const newUser = new User({ username: resolvedUsername, email: normalizedEmail, password: hassedPassword });
 
     
     try {
@@ -56,14 +64,21 @@ export const register = async (req, res) =>{
 // login
 
 export const login = async (req,res) =>{
-    const {username,password} = req.body;
+    const {email, password, username} = req.body;
+    const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
 
-    if(!username || !password){
+    // #region agent log
+    fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H2',location:'backend/Authentication/Auth.js:login',message:'login attempt',data:{hasEmail:!!email,hasUsername:!!username,hasPassword:!!password},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
+    if((!normalizedEmail && !username) || !password){
         return res.status(400).json({ message: "All fields are required" });
     }
 
     try {
-        const user = await User.findOne ({ username});
+        const user = normalizedEmail
+          ? await User.findOne({ email: normalizedEmail })
+          : await User.findOne({ username });
         if(!user){
             return res.status(400).json({ message: "Invalid credentials" });
         }

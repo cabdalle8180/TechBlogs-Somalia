@@ -5,6 +5,12 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true
+    },
     content: {
         type: String,
         required: true

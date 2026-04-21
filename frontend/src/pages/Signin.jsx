@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   RiLockPasswordLine,
-  RiUserLine,
+  RiMailLine,
   RiEyeLine,
   RiEyeOffLine,
 } from "react-icons/ri";
@@ -18,96 +18,224 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/api/userSlice";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+// function Signin() {
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [formData, setFormData] = useState({
+//     email: "",
+//     password: "",
+//   });
+//     // const { status, error } = useSelector((state) => state.user);
+//     const { status, error } = useSelector((state) => state.user || {});
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     dispatch(login(formData));
+//   }
+
+//   useEffect(() => {
+//     if (status === "succeeded") {
+//       toast.success("Login successful");
+//       navigate("/dashboard");
+//     }
+
+//     if (status === "failed") {
+//       toast.error(error || "Login failed");
+//     }
+    
+//   }, [status, error, navigate]);
+
+//   return (
+//     <div className="flex  items-center justify-center mt-5 px-4 ">
+//       <Card className="w-full max-w-md border-slate-800 bg-slate-900 shadow-2xl rounded-2xl">
+//         <CardHeader className="space-y-2 text-center">
+//           <CardTitle className="text-2xl font-bold tracking-tight text-white">
+//             Welcome back
+//           </CardTitle>
+//           <CardDescription className="text-sm text-slate-400">
+//             Sign in to access your dashboard and manage your posts.
+//           </CardDescription>
+//         </CardHeader>
+
+//         <CardContent>
+//           <form  className="space-y-5" onSubmit={handleSubmit}>
+            
+//             {/* Username Field */}
+//             <div className="grid gap-2">
+//               <Label htmlFor="email" className="text-slate-300">
+//                 Email
+//               </Label>
+//               <div className="relative flex items-center">
+//                 <RiMailLine className="absolute left-3 text-slate-400 text-lg" />
+//                 <Input
+//                   id="email"
+//                   type="email"
+//                   value={formData.email}
+//                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+//                   placeholder="you@example.com"
+//                   autoComplete="email"
+//                   className="h-11 pl-10 bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500 w-full"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Password Field */}
+//             <div className="grid gap-2">
+//               <div className="flex items-center justify-between">
+//                 <Label htmlFor="password" className="text-slate-300">
+//                   Password
+//                 </Label>
+//                 <button
+//                   type="button"
+//                   className="text-xs text-blue-400 hover:text-blue-300 transition"
+//                 >
+//                   Forgot password?
+//                 </button>
+//               </div>
+
+//               <div className="relative flex items-center">
+//                 {/* Left Icon */}
+//                 <RiLockPasswordLine className="absolute left-3 text-slate-400 text-lg" />
+
+//                 {/* Input */}
+//                 <Input
+//                   id="password"
+//                   value={formData.password}
+//                   onChange={(e) => setFormData({...formData, password: e.target.value})}
+//                   type={showPassword ? "text" : "password"}
+//                   placeholder="Enter your password"
+//                   autoComplete="current-password"
+//                   className="h-11 pl-10 pr-10 bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500 w-full"
+//                 />
+
+//                 {/* Eye Icon */}
+//                 <span
+//                   onClick={() => setShowPassword(!showPassword)}
+//                   className="absolute right-3 text-slate-400 text-lg cursor-pointer"
+//                 >
+//                   {showPassword ? <RiEyeOffLine /> : <RiEyeLine />}
+//                 </span>
+//               </div>
+//             </div>
+
+//             {/* Submit Button */}
+//             <button
+//               type="submit"
+//               className="w-full h-11 mt-2 rounded-xl bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/20 transition hover:bg-blue-500 hover:scale-[1.01] active:scale-[0.99]"
+//             >
+//               Sign in
+//             </button>
+
+//             {/* Footer */}
+//              <Link to="/signup">
+//            <p className="text-center text-xs text-slate-400 pt-2">
+//               Don&apos;t have an account?{" "}
+//               <button
+//                 type="button"
+//                 className="text-blue-400 hover:text-blue-300 font-medium transition"
+//               >
+//                 Create Account
+//               </button>
+//             </p>
+//            </Link>
+//           </form>
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
+
+// export default Signin;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ... (imports-kaagii hore)
+
 function Signin() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
-    // const { status, error } = useSelector((state) => state.user);
-    const { status, error } = useSelector((state) => state.user || {});
+
+  // Hubi in loading uu jiro si aad badanka u Disable-gareyso
+  const { status, error } = useSelector((state) => state.user || {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(login(formData));
-  }
+  };
 
   useEffect(() => {
     if (status === "succeeded") {
-      toast.success("Login successful 🎉");
+      toast.success("Login successful");
+      navigate("/dashboard");
+      // Halkan waxaa habboon in aad dispatch(resetStatus()) ku samayso haddii aad leedahay
     }
 
     if (status === "failed") {
-      toast.error(error || "Login failed ❌");
+      toast.error(error || "Login failed");
+      // Halkan waxaa habboon in aad dispatch(resetStatus()) ku samayso
     }
-    
-  }, [status]);
+  }, [status, error, navigate]);
 
   return (
-    <div className="flex  items-center justify-center mt-5 px-4 ">
+    <div className="flex items-center justify-center mt-5 px-4 ">
       <Card className="w-full max-w-md border-slate-800 bg-slate-900 shadow-2xl rounded-2xl">
-        <CardHeader className="space-y-2 text-center">
-          <CardTitle className="text-2xl font-bold tracking-tight text-white">
-            Welcome back
-          </CardTitle>
-          <CardDescription className="text-sm text-slate-400">
-            Sign in to access your dashboard and manage your posts.
-          </CardDescription>
-        </CardHeader>
-
+        {/* ... CardHeader ... */}
         <CardContent>
-          <form  className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             
-            {/* Username Field */}
+            {/* Email Field */}
             <div className="grid gap-2">
-              <Label htmlFor="username" className="text-slate-300">
-                Username
-              </Label>
+              <Label htmlFor="email" className="text-slate-300">Email</Label>
               <div className="relative flex items-center">
-                <RiUserLine className="absolute left-3 text-slate-400 text-lg" />
+                <RiMailLine className="absolute left-3 text-slate-400 text-lg" />
                 <Input
-                  id="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  placeholder="Enter your username"
-                  autoComplete="username"
-                  className="h-11 pl-10 bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500 w-full"
+                  id="email"
+                  type="email"
+                  required // Waxaa fiican in aad ku darto
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="you@example.com"
+                  className="h-11 pl-10 bg-slate-950/50 border-slate-700 text-white"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-slate-300">
-                  Password
-                </Label>
-                <button
-                  type="button"
-                  className="text-xs text-blue-400 hover:text-blue-300 transition"
-                >
-                  Forgot password?
-                </button>
-              </div>
-
+              {/* ... Label ... */}
               <div className="relative flex items-center">
-                {/* Left Icon */}
                 <RiLockPasswordLine className="absolute left-3 text-slate-400 text-lg" />
-
-                {/* Input */}
                 <Input
                   id="password"
+                  required
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                  className="h-11 pl-10 pr-10 bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500 w-full"
+                  className="h-11 pl-10 pr-10 bg-slate-950/50 border-slate-700 text-white"
                 />
-
-                {/* Eye Icon */}
                 <span
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 text-slate-400 text-lg cursor-pointer"
@@ -117,26 +245,23 @@ function Signin() {
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button - Lagu daray loading state */}
             <button
               type="submit"
-              className="w-full h-11 mt-2 rounded-xl bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/20 transition hover:bg-blue-500 hover:scale-[1.01] active:scale-[0.99]"
+              disabled={status === "loading"} // Disable haddii uu login socdo
+              className={`w-full h-11 mt-2 rounded-xl text-white font-semibold transition 
+                ${status === "loading" ? "bg-blue-800 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-500"}`}
             >
-              Sign in
+              {status === "loading" ? "Signing in..." : "Sign in"}
             </button>
 
-            {/* Footer */}
-             <Link to="/signup">
-           <p className="text-center text-xs text-slate-400 pt-2">
+            {/* Link-ga hoose - Ka saar badanka (button) gudaha Link-ga ku jira */}
+            <p className="text-center text-xs text-slate-400 pt-2">
               Don&apos;t have an account?{" "}
-              <button
-                type="button"
-                className="text-blue-400 hover:text-blue-300 font-medium transition"
-              >
+              <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium">
                 Create Account
-              </button>
+              </Link>
             </p>
-           </Link>
           </form>
         </CardContent>
       </Card>

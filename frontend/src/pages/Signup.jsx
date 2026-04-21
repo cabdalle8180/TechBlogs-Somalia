@@ -19,12 +19,14 @@ import {
 } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const {status, error} = useSelector((state) => state.user || {});
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
@@ -44,14 +46,15 @@ function Signup() {
 
   useEffect(() => {
     if (status === "succeeded") {
-      toast.success("Registration successful 🎉");
+      toast.success("Registration successful");
+      navigate("/dashboard");
     }
 
     if (status === "failed") {
-      toast.error(error || "Registration failed ❌");
+      toast.error(error || "Registration failed");
     }
 
-  }, [status]);
+  }, [status, error, navigate]);
 
   return (
     <div className="flex items-center justify-center px-4 mt-5 overflow-hidden">
@@ -68,21 +71,21 @@ function Signup() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
             
-            {/* Username */}
+            {/* Name */}
             <div className="grid gap-2">
-              <Label htmlFor="username" className="text-slate-300">
-                Username
+              <Label htmlFor="name" className="text-slate-300">
+                Name
               </Label>
               <div className="relative flex items-center">
                 <RiUserLine className="absolute left-3 text-slate-400 text-lg" />
                 <Input
                 onChange={handleChange}
-                value={formData.username}
-                name="username"
+                value={formData.name}
+                name="name"
 
-                  id="username"
+                  id="name"
                   type="text"
-                  placeholder="your username"
+                  placeholder="Your name"
                   className="h-11 pl-10 bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500 w-full"
                 />
               </div>

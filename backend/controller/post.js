@@ -5,13 +5,13 @@ import { v2 as cloudinary } from "cloudinary";
 export const createPost = async (req,res) => {
     try {
 
-        const { title, content,image } = req.body;
+        let { title, category, content, image } = req.body;
         const userId= req.user._id.toString();
         
         const user=  await User.findById(userId);
         
-        if (!title || !content || !image) {
-            return res.status(400).json({ message: "Title, content, and image are required" });
+        if (!title || !category || !content) {
+            return res.status(400).json({ message: "Title, category, and content are required" });
         }
         if (image) {
             const uploadimage = await cloudinary.uploader.upload(image)
@@ -19,6 +19,7 @@ export const createPost = async (req,res) => {
         }
         const newpost = new Post ({
             title,
+            category,
             content,
             image,
             author: user._id
@@ -35,13 +36,22 @@ export const createPost = async (req,res) => {
 // gell all posts
 export const getAllPosts = async (req,res) => {
     try {
-        const posts  = await Post.find().sort({ createdAt: -1}).populate({ path: "author", select: "-password" })
-
-        if (posts.length === 0 ){
-            return res.status(404).json ({
-                message : "No posts found"
-            })
+        const { q, category } = req.query;
+        const filter = {};
+        if (category) filter.category = String(category).toLowerCase();
+        if (q) {
+            const query = String(q);
+            filter.$or = [
+                { title: { $regex: query, $options: "i" } },
+                { content: { $regex: query, $options: "i" } },
+                { category: { $regex: query, $options: "i" } },
+            ];
         }
+
+        const posts  = await Post.find(filter)
+            .sort({ createdAt: -1})
+            .populate({ path: "author", select: "-password" })
+
         res.status(200).json({ posts });
 
     } catch (error) {
@@ -52,11 +62,11 @@ export const getAllPosts = async (req,res) => {
 // get single post
 export const getPostById = async (req,res) => {
     try {
-        const postid = await Post.findById(req.params.id).populate({ path: "author", select: "-password" })
-        if (postid.length === 0){
-            return res.status(404).json({message: "Post not found"})
+        const post = await Post.findById(req.params.id).populate({ path: "author", select: "-password" })
+        if (!post){
+            return res.status(404).json({ message: "Post not found" })
         }
-        res.status(200).json({ post: postid });
+        res.status(200).json({ post });
     } catch (error) {
         console.error(`Error fetching post by ID: ${error.message}`);
         res.status(500).json({ message: "Server error" });
@@ -65,7 +75,7 @@ export const getPostById = async (req,res) => {
 // update post
 export const updatePost = async (req,res) => {
     try {
-        const { title, content,image } = req.body;
+        let { title, category, content, image } = req.body;
 
         const id = req.params.id;
         const userId = req.user._id.toString();
@@ -75,17 +85,26 @@ export const updatePost = async (req,res) => {
             return res.status(404).json({ message: "Post not found" });
         }
         if (post.author.toString() !== userId) {
+            // #region agent log
+            fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H5',location:'backend/controller/post.js:updatePost:forbidden',message:'update blocked: not owner',data:{postId:id,postAuthor:post.author?.toString(),userId},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
             return res.status(403).json({ message: "You are not the author of this post" });
         }
-        if (!title && !content && !image) {
-            return res.status(400).json({ message: "At least one of Title, content, or image is required" });
+        if (!title && !category && !content && !image) {
+            return res.status(400).json({ message: "At least one of title, category, content, or image is required" });
         }
         // image update cloudinary
         if (image && image !== post.image) {
             const uploadimage = await cloudinary.uploader.upload(image)
             image = uploadimage.secure_url
         }
-        const updatedPost = await Post.findByIdAndUpdate(id, {title, content, image}, { new: true, runValidators: true });
+        const update = {};
+        if (typeof title === "string" && title.trim()) update.title = title;
+        if (typeof category === "string" && category.trim()) update.category = category.trim().toLowerCase();
+        if (typeof content === "string" && content.trim()) update.content = content;
+        if (typeof image === "string" && image.trim()) update.image = image;
+
+        const updatedPost = await Post.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         
 
         // await updatedPost.save();
@@ -106,13 +125,22 @@ export const deletePost = async (req,res) => {
         }
 
         if (post.author.toString() !== userId){
+            // #region agent log
+            fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H5',location:'backend/controller/post.js:deletePost:forbidden',message:'delete blocked: not owner',data:{postId:id,postAuthor:post.author?.toString(),userId},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
             return res.status(403).json({ message: "You are not the author of this post" });
         }
 
         // image delete from cloudinary
         if (post.image) {
-            const imageId = post.image.split("/").pop().split(".")[0]
-            await cloudinary.uploader.destroy(imageId)
+            // If image is a Cloudinary URL we may not have the exact public_id here.
+            // Delete failure should not block post deletion.
+            try {
+                const imageId = post.image.split("/").pop().split(".")[0]
+                await cloudinary.uploader.destroy(imageId)
+            } catch (e) {
+                console.warn("Cloudinary delete skipped/failed:", e?.message);
+            }
         }
 
         await Post.findByIdAndDelete(id);

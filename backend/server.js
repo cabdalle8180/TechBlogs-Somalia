@@ -1,10 +1,12 @@
 import express from "express"
 import dotenv from "dotenv";
 import ConnectendDBs from "./config/dbs.js";
-import authRoutes from "./routes/authroutes.js";
 import cookieParser from "cookie-parser";
+import authRoutes from "./routes/Authroutes.js";
 import postRoutes from "./routes/Postroutes.js";
 import { v2 as cloudinary } from "cloudinary";
+
+dotenv.config()
 
 cloudinary.config({
     cloud_name: process.env.cloudinary_cloud_name,
@@ -13,8 +15,7 @@ cloudinary.config({
 })
 
 const server = express();
-dotenv.config()
-server.use(express.json())
+server.use(express.json({ limit: "10mb" }))
 server.use(cookieParser())
 // routes
 server.use("/api/posts",postRoutes)
