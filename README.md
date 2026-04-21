@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 📘 Tech Blog Website – General Requirements
 🔰 Introduction
 This Tech Blog Website is going be a user-friendly platform where tech enthusiasts, developers, and writers can share their knowledge, ideas, and updates on various technology topics. This project is designed to support both content creators and readers by providing essential features such as user accounts, personalized dashboards, blog post management, and an intuitive browsing experience. The goal is to foster a vibrant community of tech-savvy users who regularly contribute and consume valuable content.
@@ -123,3 +124,6 @@ npm run dev
 
 
 
+=======
+# TechBlogs-Somalia
+>>>>>>> 6792b785d65c947b5cee4840cefe110c2a4265c2
