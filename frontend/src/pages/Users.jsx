@@ -198,12 +198,14 @@ function Users() {
     fetchUsers();
   }, [currentUser]);
 
+  
+
   // DELETE USER (or post depending on backend)
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete?")) return;
 
     try {
-      const res = await fetch(`/api/users/${id}`, {
+      const res = await fetch(`/api/users/deleteUser/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

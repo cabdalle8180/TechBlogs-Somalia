@@ -150,3 +150,37 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+
+// delete user bt admin
+export const deleteUser = async (req, res) => {
+  try {
+    if (!req.user || !req.user?.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to perform this action",
+      });
+    }
+
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user",
+    });
+  }
+};
