@@ -171,9 +171,9 @@ function Users() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // GET USERS
-  useEffect(() => {
-    const fetchUsers = async () => {
+
+
+const fetchUsers = async () => {
       if (!currentUser?.username) return;
 
       try {
@@ -195,10 +195,49 @@ function Users() {
       }
     };
 
+  // GET USERS
+  useEffect(() => {
     fetchUsers();
   }, [currentUser]);
 
-  
+  // update user (or post depending on backend)
+  const updatedRole = async ({ id, isAdmin, isActived }) => {
+    try {
+      const res = await fetch(`/api/users/updateUserRole/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ isAdmin, isActived :isActived}),
+      });
+
+      const data = await res.json();
+      fetchUsers();
+     
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+  // updatestatus
+  const updatestatus = async ({ id, isAdmin, isActived }) => {
+    try {
+      const res = await fetch(`/api/users/updateUserRole/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ isAdmin, isActived }),
+      });
+
+      const data = await res.json();
+      fetchUsers();
+     
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   // DELETE USER (or post depending on backend)
   const handleDelete = async (id) => {
@@ -289,12 +328,34 @@ function Users() {
               {/* ACTIONS */}
               <div className="flex items-center gap-3">
 
-                <Link
-                  to={`/dashboard/edit-user/${user._id}`}
+                <div
+                  
                   className="text-indigo-600 hover:bg-indigo-50 p-2 rounded"
                 >
-                  <TbEdit size={20} />
-                </Link>
+                  {user?.isActived ? (
+                    <button onClick={()=> updatestatus ({id: user._id, isAdmin:user.isAdmin, isActived: false})} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                      Disable
+                    </button>
+                  ) : (
+                    <button onClick={()=> updatestatus ({id: user._id, isAdmin:user.isAdmin, isActived: true})} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                      Enable
+                    </button>
+                  )}
+                </div>
+                <div
+                  
+                  className="text-indigo-600 hover:bg-indigo-50 p-2 rounded"
+                >
+                  {user?.isAdmin ? (
+                    <button onClick={()=> updatedRole ({id: user._id,isAdmin:false,isActived: user.isActived})} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                      Demote User
+                    </button>
+                  ) : (
+                    <button onClick={()=> updatedRole ({id: user._id,isAdmin:true,isActived: user.isActived})} className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                      Grant Admin
+                    </button>
+                  )}
+                </div>
 
                 <button
                   onClick={() => handleDelete(user._id)}

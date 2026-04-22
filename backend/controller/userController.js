@@ -184,3 +184,72 @@ export const deleteUser = async (req, res) => {
     });
   }
 };
+
+// // update-admin-user
+// export const updateUserByAdmin = async (req, res) => {
+//   try {
+//     const {isActived, isAdmin} = req.body;
+//     const { id } = req.params;
+//     const updatedFiels = {
+//       isActived,
+//       isAdmin
+//     }
+//     const updateduser = await User.findByIdAndUpdate(id,{isActived, isAdmin}, {new: true, runValidators:true}).select("-password");
+//     if (!updateduser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+
+//       res.status(200).json({
+//         success: true,
+//         data: updateduser,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+
+//         success: false,
+//         message: "Failed to update user",
+//       });
+//     }
+//   };
+
+
+
+
+
+
+
+export const updateUserByAdmin = async (req, res) => {
+  try {
+    const { isActived, isAdmin } = req.body;
+    const { id } = req.params;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { isActived, isAdmin },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user",
+    });
+  }
+};
