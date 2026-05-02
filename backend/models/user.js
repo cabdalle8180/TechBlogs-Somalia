@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   isActived: {
     type: Boolean,
     required: true,
-    default: false,
+    default: true,
   },
 }, { timestamps: true });
 

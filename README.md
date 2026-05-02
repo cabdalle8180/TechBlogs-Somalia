@@ -79,3 +79,24 @@ Displayed when a user account is blocked by the admin.
 ```bash
 git clone https://github.com/cabdalle8180/TechBlogs-Somalia.git
 cd TechBlogs-Somalia
+
+
+### 2️⃣ Backend Setup
+cd backend
+npm install
+npm start
+
+
+### 3️⃣ Frontend Setup
+cd frontend
+npm install
+npm run dev
+
+### 🔐 Environment Variables
+
+mongodbUrl=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=3000
+cloudinary_cloud_name=YourCloudname
+cloudinary_api_key=Cloud_API
+cloudinary_api_secret=Cloud_API_Secret
