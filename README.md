@@ -1,75 +1,81 @@
-📘 Tech Blog Website – General Requirements
+# 🚀 Tech Blog Website
 
-🔰 Introduction
-This Tech Blog Website is going be a user-friendly platform where tech enthusiasts, developers, and writers can share their knowledge, ideas, and updates on various technology topics. This project is designed to support both content creators and readers by providing essential features such as user accounts, personalized dashboards, blog post management, and an intuitive browsing experience. The goal is to foster a vibrant community of tech-savvy users who regularly contribute and consume valuable content.
+A full-stack tech blog platform where developers, writers, and tech enthusiasts can share knowledge, ideas, and updates on various technology topics. The platform provides a smooth experience for both content creators and readers.
 
-1. 👤 User Accounts
-Visitors can sign up by providing their name, email address, and a secure password.
-Registered users can log in using their email and password.
-After logging in, users are redirected to a personal dashboard where they can manage their blog posts.
+---
 
-2. 🏠 Home Page
-The homepage welcomes visitors and introduces the blog.
-The hero section at the top highlights the most recent blog post, displaying:
-- Title
-- Featured image
-- Short preview or excerpt
+## 🌐 Live Demo
 
-Below the hero section, additional recent blog posts are showcased in a grid or list format.
+- Frontend: https://your-frontend-url  
+- Backend: https://your-backend-url  
 
-3. 📝 Blog Page
-Displays a collection of all published blog posts in one place.
-Each blog entry shows:
-- Title
-- Category
-- Thumbnail image
-- Brief preview/excerpt
+---
 
-Visitors can click “Read More” to view the full content.
+## 📸 Screenshots
 
-Optional features:
-- Search bar to find specific posts
-- Category filter to narrow down topics
+### 🏠 Home Page
+![Home Page](./screenshots/home.png)
 
-4. ✉️ Contact Page
-This page provides contact information only—there is no message submission form.
-Visitors can find:
-- Email address
-- Phone number (if applicable)
-- Social media links (e.g., Twitter, LinkedIn)
-- Physical address (if relevant)
+---
 
-5. 🧑‍💼 User Dashboard (Logged-In Users Only)
-Users have access to a dashboard displaying all their submitted blog posts.
-Each post listing includes:
-- Title
-- Category
-- Publish date
+### 📝 Blogs List Page
+Displays all published blogs with search and category filtering.
 
-Users can:
-- Create a new blog post
-- Edit existing blog posts
-- Delete posts
+![Blogs List](./screenshots/blogs-list.png)
 
-6. 🖊️ Creating a Blog Post
-Users can create new blog content through a dedicated form.
-The form includes:
-- Post title
-- Category or topic (e.g., Tech, Coding, AI)
-- Featured image
-- Blog content using a rich text editor
+---
 
-7. 📄 Individual Blog Post Page
-Clicking a blog post opens a page showing the full content.
-The page includes:
-- Title
-- Category
-- Featured image
-- Full written content
-- Author name and publish date (optional)
+### 🧑‍💼 Dashboard
+User dashboard for managing posts (Create, Update, Delete).
 
-8. 🔒 User Permissions & Security
-Only registered and logged-in users can create, edit, or delete their own blog posts.
-The system keeps track of post ownership to ensure users can only manage their own content.
+![Dashboard](./screenshots/dashboard.png)
 
+---
 
+### 🔐 User Management (Admin Panel)
+Admin panel for managing users, roles, and account status.
+
+![User Management](./screenshots/user-management.png)
+
+---
+
+### 🚫 Blocked Account View
+Displayed when a user account is blocked by the admin.
+
+![Blocked Account](./screenshots/block_Acount.png)
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js (Vite)
+- Tailwind CSS
+
+### Backend
+- Node.js
+- Express.js
+
+### Database
+- MongoDB (Atlas)
+
+---
+
+## ✨ Features
+
+- 🔐 JWT Authentication (Login / Signup)
+- 🧑‍💼 Role-based Access (User / Admin)
+- 📝 Full CRUD operations for blogs
+- 🔍 Search & Filter system
+- 📱 Fully responsive UI (Mobile + Desktop)
+- 🔒 Secure authorization (users manage only their own posts)
+- ⚙️ Admin dashboard for user control
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
+```bash
+git clone https://github.com/cabdalle8180/TechBlogs-Somalia.git
+cd TechBlogs-Somalia
