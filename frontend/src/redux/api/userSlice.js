@@ -132,6 +132,7 @@ const initialState = {
     currentUser: getInitialUser(),
     status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null
+
 };
 
 export const userslice = createSlice({

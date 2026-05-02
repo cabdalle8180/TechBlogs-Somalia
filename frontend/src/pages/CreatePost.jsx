@@ -19,8 +19,8 @@ function CreatePost() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) { // 2MB Limit tusaale ahaan
-        return toast.error("Sawirku waa inuu ka yaraadaa 2MB");
+      if (file.size > 2 * 1024 * 1024) { // 2MB Limit example
+        return toast.error("Image must be smaller than 2MB");
       }
       const reader = new FileReader();
       reader.onload = () => {
@@ -34,7 +34,7 @@ function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.category || !formData.content) {
-      return toast.error("Fadlan buuxi meelaha muhiimka ah (Title, Category, Content)");
+      return toast.error("Please fill all required fields (Title, Category, Content)");
     }
     try {
       setSubmitting(true);
@@ -46,10 +46,10 @@ function CreatePost() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "Failed to create post");
-      toast.success("Maqaalkii si guul leh ayaa loo daabacay!");
+      toast.success("Post published successfully!");
       navigate("/dashboard/posts");
     } catch (err) {
-      toast.error(err?.message || "Cilad ayaa dhacday");
+      toast.error(err?.message || "Something went wrong");
     } finally {
       setSubmitting(false);
     }
@@ -64,12 +64,12 @@ function CreatePost() {
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-4 text-sm font-medium"
           >
-            <TbArrowLeft size={18} /> Dashboard-ka ku laabo
+            <TbArrowLeft size={18} /> Back to Dashboard
           </button>
           <h1 className='text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3'>
-             Qor Maqaal Cusub <span className="text-indigo-600">✍️</span>
+             Write a New Post <span className="text-indigo-600">✍️</span>
           </h1>
-          <p className='text-slate-500 mt-2'>La wadaag aqoontaada iyo fikradahaaga aduunka intiisa kale.</p>
+          <p className='text-slate-500 mt-2'>Share your knowledge and ideas with the world.</p>
         </div>
       </div>
 
@@ -81,13 +81,13 @@ function CreatePost() {
             {/* Title */}
             <div className="space-y-2">
               <label htmlFor="title" className='block text-sm font-bold text-slate-700 ml-1'>
-                Cinwaanka Maqaalka
+                Post Title
               </label>
               <input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData((p) => ({ ...p, title: e.target.value }))}
-                placeholder='Tusaale: Sida loo barto React 2026...'
+                placeholder='Example: How to learn React in 2026...'
                 type="text"
                 className='w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 focus:bg-white outline-none transition-all text-lg font-medium'
               />
@@ -96,7 +96,7 @@ function CreatePost() {
             {/* Content Editor */}
             <div className="space-y-2">
               <label className='block text-sm font-bold text-slate-700 ml-1'>
-                Nuxurka Maqaalka
+                Post Content
               </label>
               <div className="rounded-2xl border border-slate-100 overflow-hidden focus-within:ring-4 focus-within:ring-indigo-50 transition-all">
                 <RichTextEditor
@@ -115,13 +115,13 @@ function CreatePost() {
              {/* Category */}
              <div className="space-y-2">
               <label htmlFor="category" className='block text-sm font-bold text-slate-700 ml-1'>
-                Qaybta (Category)
+                Category
               </label>
               <input
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData((p) => ({ ...p, category: e.target.value }))}
-                placeholder="Tusaale: Technology"
+                placeholder="Example: Technology"
                 type="text"
                 className='w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:border-indigo-500 focus:bg-white outline-none transition-all'
               />
@@ -130,7 +130,7 @@ function CreatePost() {
             {/* Image Upload */}
             <div className="space-y-2">
               <label className='block text-sm font-bold text-slate-700 ml-1'>
-                Sawirka Maqaalka
+                Post Image
               </label>
               <input
                 ref={fileInput}
@@ -148,7 +148,7 @@ function CreatePost() {
                   <>
                     <img src={preview} alt="Preview" className='w-full h-full object-cover' />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
-                       Bedel Sawirka
+                       Change Image
                     </div>
                   </>
                 ) : (
@@ -170,15 +170,15 @@ function CreatePost() {
               {submitting ? (
                 <span className="animate-pulse">Loading...</span>
               ) : (
-                <> Daabac Maqaalka <TbCircleCheck size={20} /> </>
+                <> Publish Post <TbCircleCheck size={20} /> </>
               )}
             </button>
           </div>
 
           <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-            <h4 className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-1">Talo bixin:</h4>
+            <h4 className="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-1">Tip:</h4>
             <p className="text-[11px] text-indigo-600 leading-relaxed">
-              Hubi in sawirkaagu yahay mid tayo sare leh (High Resolution) si uu u soo jiito akhristayaal badan.
+              Make sure your image is high quality (High Resolution) to attract more readers.
             </p>
           </div>
         </div>

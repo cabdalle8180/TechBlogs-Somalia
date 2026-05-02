@@ -88,40 +88,6 @@ export const updateUserProfile = async (req, res) => {
 };
 
 
-
-
-// export const getAllUsers = async (req, res) => {
-//   try {
-//     if ( req.user|| !req.user?.isAdmin) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "you are not authorized to access this resource",
-//       });
-//     }
-
-//     const users = await User.find()
-//       .select("-password")
-//       .sort({ createdAt: -1 });
-
-//     res.json({
-//       success: true,
-//       count: users.length,
-//       data: users,
-//     });
-
-//   } catch (error) {
-//     console.log(error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch users",
-//     });
-//   }
-// };
-
-
-
-
 export const getAllUsers = async (req, res) => {
   try {
     if (!req.user || !req.user?.isAdmin) {
@@ -185,42 +151,6 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-// // update-admin-user
-// export const updateUserByAdmin = async (req, res) => {
-//   try {
-//     const {isActived, isAdmin} = req.body;
-//     const { id } = req.params;
-//     const updatedFiels = {
-//       isActived,
-//       isAdmin
-//     }
-//     const updateduser = await User.findByIdAndUpdate(id,{isActived, isAdmin}, {new: true, runValidators:true}).select("-password");
-//     if (!updateduser) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "User not found",
-//       });
-
-//       res.status(200).json({
-//         success: true,
-//         data: updateduser,
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-
-//         success: false,
-//         message: "Failed to update user",
-//       });
-//     }
-//   };
-
-
-
-
-
-
 
 export const updateUserByAdmin = async (req, res) => {
   try {
@@ -253,3 +183,26 @@ export const updateUserByAdmin = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

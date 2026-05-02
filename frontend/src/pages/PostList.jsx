@@ -30,12 +30,12 @@ function PostList() {
   }, [currentUser]);
 
   const handleDeletePost = async (id) => {
-    if (!window.confirm("Ma hubtaa inaad tirtirto maqaalkan?")) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
       const res = await fetch(`/api/posts/${id}`, { method: "DELETE", credentials: "include" });
-      if (!res.ok) throw new Error("Tirtiristu way fashilantay");
+      if (!res.ok) throw new Error("Delete failed");
       setPosts((prev) => prev.filter((post) => post._id !== id));
-      toast.success("Maqaalkii waa la tirtiray");
+      toast.success("Post deleted successfully");
     } catch (err) {
       toast.error(err.message);
     }
@@ -57,9 +57,9 @@ function PostList() {
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Maamulka <span className="text-indigo-600">Maqaallada</span>
+            Manage <span className="text-indigo-600">Posts</span>
           </h1>
-          <p className="text-slate-500 text-sm mt-1">Waxaad halkan ku maamuli kartaa dhamaan maqaallada aad qortay.</p>
+          <p className="text-slate-500 text-sm mt-1">Here you can manage all the posts you have written.</p>
         </div>
         <Link 
           to="/dashboard/create-post" 
@@ -79,7 +79,7 @@ function PostList() {
       <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
         {sortedPosts.length === 0 ? (
           <div className="p-20 text-center text-slate-400 italic">
-            Weli ma jiraan wax maqaal ah oo aad qortay.
+            You have not written any posts yet.
           </div>
         ) : (
           <div className="divide-y divide-slate-50">

@@ -3,13 +3,18 @@ import Sidebar from "../components/Sidebar";
 import { useDispatch } from "react-redux";
 import { logout as logoutThunk, resetStatus } from "../redux/api/userSlice";
 import { toast } from "react-toastify";
-import { TbLayoutDashboard, TbPlus, TbLogout, TbSmartHome } from "react-icons/tb";
+import { TbLayoutDashboard, TbPlus, TbLogout, TbSmartHome, TbUserX } from "react-icons/tb";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
+ 
+  
+  const currentUser = useSelector((state) => state.user?.currentUser);
+  console.log(currentUser);
+  
   const onLogout = async () => {
     const result = await dispatch(logoutThunk());
     if (logoutThunk.fulfilled.match(result)) {
@@ -24,6 +29,29 @@ function Dashboard() {
   // Helper function for active mobile links
   const isActive = (path) => location.pathname === path;
 
+
+
+
+
+  
+if (currentUser?.isActived === false){ 
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <div className="max-w-md w-full bg-white p-8 rounded-3xl shadow-xl text-center">
+        <div className="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <TbUserX size={40} />
+        </div>
+        <h1 className="text-2xl font-bold mb-2">Akoonkaaga waa la xannibay</h1>
+        <p className="text-slate-500 mb-8">Maamulaha ayaa damiyay akoonkaaga. Fadlan la xiriir support-ka haddii aad u baahan tahay caawimaad.</p>
+        <button onClick={onLogout} className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold">Ka bax (Log Out)</button>
+      </div>
+    </div>
+  );
+}
+
+
+
+  
   return (
     <div className="flex min-h-screen bg-slate-50/50">
       {/* Sidebar - Desktop */}
@@ -101,3 +129,23 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

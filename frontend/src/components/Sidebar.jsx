@@ -67,18 +67,18 @@ function Sidebar() {
       </button>
 
       {/* Logo */}
-      <div className="p-6">
+      {/* <div className="p-6">
         <Link to="/" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-bold">
             T
           </div>
           {isOpen && <span className="text-white font-bold">Tech</span>}
         </Link>
-      </div>
+      </div> */}
 
       {/* User */}
       {currentUser && (
-        <div className="px-4 mb-6">
+        <div className="px-4 p-6">
           <div className={`flex items-center gap-3 ${!isOpen && "justify-center"}`}>
             <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center">
               {currentUser.username?.[0]?.toUpperCase()}
@@ -87,7 +87,7 @@ function Sidebar() {
             {isOpen && (
               <div>
                 <p className="text-white text-sm">{currentUser.username}</p>
-                <p className="text-xs text-gray-400">Admin</p>
+                <p className="text-xs text-gray-400">{currentUser.isAdmin ? "Admin" : "User"}</p>
               </div>
             )}
           </div>

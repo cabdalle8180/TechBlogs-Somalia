@@ -1,385 +1,124 @@
-// import { useEffect, useMemo, useState } from "react";
-// import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import moment from "moment";
-// import { toast } from "react-toastify";
-// import { TbEdit, TbTrash, TbPlus } from "react-icons/tb";
-
-// function Users() {
-//   const currentUser = useSelector((state) => state.user?.currentUser);
-//   const [users, setUsers] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchUsers = async () => {
-//       if (!currentUser?.username) return;
-//       try {
-//         setLoading(true);
-//         const res = await fetch(`/api/users/getAllUsers`, { credentials: "include" });
-//         const data = await res.json();
-//         if (!res.ok) throw new Error(data?.message || "Failed to fetch users");
-//         setUsers(Array.isArray(data) ? data : data.users || []);
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchUsers();
-//   }, [currentUser]);
-
-//   const handleDeletePost = async (id) => {
-//     if (!window.confirm("Ma hubtaa inaad tirtirto maqaalkan?")) return;
-//     try {
-//       const res = await fetch(`/api/posts/${id}`, { method: "DELETE", credentials: "include" });
-//       if (!res.ok) throw new Error("Tirtiristu way fashilantay");
-//       setUsers((prev) => prev.filter((user) => user._id !== id));
-//       toast.success("Maqaalkii waa la tirtiray");
-//     } catch (err) {
-//       toast.error(err.message);
-//     }
-//   };
-
-//   const sortedPosts = useMemo(() => {
-//     return [...users].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-//   }, [users]);
-
-//   if (loading) return (
-//     <div className="flex justify-center items-center min-h-[400px]">
-//       <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
-//     </div>
-//   );
-
-//   return (
-//     <div className="max-w-5xl mx-auto p-4 md:p-8">
-//       {/* Header Section */}
-//       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
-//         <div>
-//           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
-//             Maamulka <span className="text-indigo-600">Maqaallada</span>
-//           </h1>
-//           <p className="text-slate-500 text-sm mt-1">Waxaad halkan ku maamuli kartaa dhamaan maqaallada aad qortay.</p>
-//         </div>
-//         <Link 
-//           to="/dashboard/create-post" 
-//           className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-lg shadow-indigo-200"
-//         >
-//           <TbPlus size={20} /> New Post
-//         </Link>
-//       </div>
-
-//       {error && (
-//         <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 border border-red-100 italic">
-//           {error}
-//         </div>
-//       )}
-
-//       {/* Posts Container */}
-//       <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
-//         {sortedPosts.length === 0 ? (
-//           <div className="p-20 text-center text-slate-400 italic">
-//             Weli ma jiraan wax maqaal ah oo aad qortay.
-//           </div>
-//         ) : (
-//           <div className="divide-y divide-slate-50">
-//             {sortedPosts.map((post) => (
-//               <div 
-//                 key={post._id} 
-//                 className="group flex flex-col md:flex-row md:items-center justify-between p-5 md:p-6 hover:bg-slate-50/80 transition-colors"
-//               >
-//                 {/* Post Info */}
-//                 <div className="flex items-start gap-4 flex-1">
-//                   <div className="hidden md:flex w-12 h-12 shrink-0 rounded-2xl bg-indigo-50 items-center justify-center text-indigo-600 font-bold group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
-//                     {post.title[0].toUpperCase()}
-//                   </div>
-//                   <div className="min-w-0">
-//                     <h3 className="text-base md:text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-indigo-600 transition-colors">
-//                       {post.title}
-//                     </h3>
-//                     <div className="flex items-center gap-3 mt-1.5">
-//                       <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">
-//                         {post.category || "General"}
-//                       </span>
-//                       <span className="text-xs text-slate-400">
-//                         {moment(post.createdAt).format("MMM DD, YYYY")}
-//                       </span>
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Actions */}
-//                 <div className="flex items-center gap-2 mt-4 md:mt-0 ml-0 md:ml-6">
-//                   <Link
-//                     to={`/dashboard/edit-post/${post._id}`}
-//                     className="p-2.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
-//                     title="Edit Post"
-//                   >
-//                     <TbEdit size={22} />
-//                   </Link>
-//                   <button
-//                     onClick={() => handleDeletePost(post._id)}
-//                     className="p-2.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
-//                     title="Delete Post"
-//                   >
-//                     <TbTrash size={22} />
-//                   </button>
-//                   <Link 
-//                     to={`/blogs/${post._id}`}
-//                     className="ml-2 text-xs font-bold text-indigo-600 hover:underline"
-//                   >
-//                     View →
-//                   </Link>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Footer Info */}
-//       <div className="mt-6 text-center">
-//         <p className="text-xs text-slate-400">Total Posts: {posts.length}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Users;
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { TbEdit, TbTrash, TbPlus } from "react-icons/tb";
+import { TbTrash, TbPlus, TbShieldCheck, TbShieldOff, TbUserCheck, TbUserX } from "react-icons/tb";
 
 function Users() {
   const currentUser = useSelector((state) => state.user?.currentUser);
-
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
+  const fetchUsers = async () => {
+    if (!currentUser?.isAdmin) return; 
+    try {
+      setLoading(true);
+      const res = await fetch("/api/users/getAllUsers", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "Waan ku guuldareysan nay inaan keeno users-ka");
+      setUsers(data?.data || []);
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-
-const fetchUsers = async () => {
-      if (!currentUser?.username) return;
-
-      try {
-        setLoading(true);
-
-        const res = await fetch("/api/users/getAllUsers", {
-          credentials: "include",
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data?.message || "Failed to fetch users");
-
-        setUsers(data?.data || []);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-  // GET USERS
   useEffect(() => {
     fetchUsers();
   }, [currentUser]);
 
-  // update user (or post depending on backend)
-  const updatedRole = async ({ id, isAdmin, isActived }) => {
+  // Shaqadan waxay qabataa labadii shaqo ee hore (Update Role & Status)
+  const handleUpdate = async (id, updates) => {
     try {
       const res = await fetch(`/api/users/updateUserRole/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ isAdmin, isActived :isActived}),
+        body: JSON.stringify(updates),
       });
 
-      const data = await res.json();
-      fetchUsers();
-     
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
-  // updatestatus
-  const updatestatus = async ({ id, isAdmin, isActived }) => {
-    try {
-      const res = await fetch(`/api/users/updateUserRole/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ isAdmin, isActived }),
-      });
-
-      const data = await res.json();
-      fetchUsers();
-     
+      if (!res.ok) throw new Error("Cusboonaysiintu way fashilantay");
+      
+      toast.success("Si guul leh ayaa loo cusboonaysiiyay");
+      fetchUsers(); 
     } catch (err) {
       toast.error(err.message);
     }
   };
 
-  // DELETE USER (or post depending on backend)
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete?")) return;
-
+    if (!window.confirm("Ma hubtaa inaad tirtirto user-kan?")) return;
     try {
       const res = await fetch(`/api/users/deleteUser/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data?.message || "Delete failed");
-
+      if (!res.ok) throw new Error("Tirtiristu way fashilantay");
       setUsers((prev) => prev.filter((u) => u._id !== id));
-      toast.success("Deleted successfully");
+      toast.success("Si guul leh ayaa loo tirtiray");
     } catch (err) {
       toast.error(err.message);
     }
   };
 
-  // SORT USERS
   const sortedUsers = useMemo(() => {
-    return [...users].sort(
-      (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
-    );
+    return [...users].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   }, [users]);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
-      </div>
-    );
+  if (loading && users.length === 0) return <div className="text-center p-10">Waa la soo raryaa...</div>;
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8">
-
-      {/* HEADER */}
+    <div className="max-w-6xl mx-auto p-4 md:p-8">
       <div className="flex justify-between items-center mb-10">
-        <h1 className="text-2xl font-bold">
-          Users <span className="text-indigo-600">Management</span>
-        </h1>
-
-        <Link
-          to="/dashboard/create-user"
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-xl"
-        >
-          <TbPlus /> Add User
-        </Link>
+        <h1 className="text-2xl font-bold">User <span className="text-indigo-600">Management</span></h1>
+        {/* <Link to="/dashboard/create-user" className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-xl">
+          <TbPlus /> Ku dar User
+        </Link> */}
       </div>
 
-      {/* ERROR */}
-      {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      {/* LIST */}
-      <div className="bg-white rounded-xl shadow overflow-hidden">
-
-        {sortedUsers.length === 0 ? (
-          <div className="p-10 text-center text-gray-400">
-            No users found
-          </div>
-        ) : (
-          sortedUsers.map((user) => (
-            <div
-              key={user._id}
-              className="flex justify-between items-center p-4 border-b hover:bg-gray-50"
-            >
-
-              {/* INFO */}
-              <div>
-                <h3 className="font-bold text-gray-800">
-                  {user.username}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {user.email}
-                </p>
-                <p className="text-xs text-gray-400">
+      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-slate-50 border-b">
+            <tr>
+              <th className="p-4 text-xs font-semibold uppercase">Users</th>
+              <th className="p-4 text-xs font-semibold uppercase">Created At</th>
+              <th className="p-4 text-xs font-semibold uppercase text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {sortedUsers.map((user) => (
+              <tr key={user._id} className="hover:bg-slate-50">
+                <td className="p-4">
+                  <div className="font-bold">{user.username}</div>
+                  <div className="text-sm text-gray-500">{user.email}</div>
+                </td>
+                <td className="p-4 text-sm text-gray-400">
                   {moment(user.createdAt).format("MMM DD, YYYY")}
-                </p>
-              </div>
-
-              {/* ACTIONS */}
-              <div className="flex items-center gap-3">
-
-                <div
-                  
-                  className="text-indigo-600 hover:bg-indigo-50 p-2 rounded"
-                >
-                  {user?.isActived ? (
-                    <button onClick={()=> updatestatus ({id: user._id, isAdmin:user.isAdmin, isActived: false})} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                      Disable
-                    </button>
-                  ) : (
-                    <button onClick={()=> updatestatus ({id: user._id, isAdmin:user.isAdmin, isActived: true})} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                      Enable
-                    </button>
-                  )}
-                </div>
-                <div
-                  
-                  className="text-indigo-600 hover:bg-indigo-50 p-2 rounded"
-                >
-                  {user?.isAdmin ? (
-                    <button onClick={()=> updatedRole ({id: user._id,isAdmin:false,isActived: user.isActived})} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                      Demote User
-                    </button>
-                  ) : (
-                    <button onClick={()=> updatedRole ({id: user._id,isAdmin:true,isActived: user.isActived})} className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-                      Grant Admin
-                    </button>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => handleDelete(user._id)}
-                  className="text-red-600 hover:bg-red-50 p-2 rounded"
-                >
-                  <TbTrash size={20} />
-                </button>
-
-              </div>
-
-            </div>
-          ))
-        )}
-
+                </td>
+                <td className="p-4 flex justify-center gap-2">
+                  <button 
+                    onClick={() => handleUpdate(user._id, { isAdmin: user.isAdmin, isActived: !user.isActived })}
+                    className={`px-3 py-1 rounded-lg text-xs ${user.isActived ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}
+                  >
+                    {user.isActived ? "Active" : "Disabled"}
+                  </button>
+                  <button 
+                    onClick={() => handleUpdate(user._id, { isActived: user.isActived, isAdmin: !user.isAdmin })}
+                    className={`px-3 py-1 rounded-lg text-xs ${user.isAdmin ? "bg-amber-100 text-amber-600" : "bg-slate-100 text-slate-600"}`}
+                  >
+                    {user.isAdmin ? "Admin" : "User"}
+                  </button>
+                  <button onClick={() => handleDelete(user._id)} className="text-red-500 p-2"><TbTrash size={18}/></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {/* FOOTER */}
-      <div className="text-center mt-4 text-gray-400 text-sm">
-        Total Users: {users.length}
-      </div>
-
     </div>
   );
 }
 
 export default Users;
-
