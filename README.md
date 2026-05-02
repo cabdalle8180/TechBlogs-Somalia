@@ -72,17 +72,4 @@ The page includes:
 Only registered and logged-in users can create, edit, or delete their own blog posts.
 The system keeps track of post ownership to ensure users can only manage their own content.
 
----
 
-## Run locally
-
-1) Backend env
-- Copy `backend/.env.example` to `backend/.env`
-- Update `mongodbUrl` and `JWT_SECRET`
-
-2) Install + run
-
-```bash
-cd backend
-npm install
-npm run dev
