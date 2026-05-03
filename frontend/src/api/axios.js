@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // Kani waa URL-kaaga Railway ee aad hadda heshay
+  // URL-kan waa kan rasmiga ah ee aad Railway ka heshay
   baseURL: "https://dazzling-spontaneity-production-04e3.up.railway.app/api", 
   withCredentials: true 
 });
