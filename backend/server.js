@@ -6,7 +6,12 @@ import authRoutes from "./routes/Authroutes.js";
 import postRoutes from "./routes/Postroutes.js";
 import { v2 as cloudinary } from "cloudinary";
 import userRoutes from "./routes/userRoutes.js";
+import cors from "cors";
+
+
+
 dotenv.config()
+
 
 cloudinary.config({
     cloud_name: process.env.cloudinary_cloud_name,
@@ -15,6 +20,10 @@ cloudinary.config({
 })
 
 const server = express();
+server.use(cors({
+  origin: "https://tech-blogs-somalia.vercel.app",
+  credentials: true
+}));
 server.use(express.json({ limit: "10mb" }))
 server.use(cookieParser())
 // routes
