@@ -80,13 +80,7 @@ ConnectendDBs()
 
 const server = express();
 
-// CORS Settings - Hubi in origin-ka uu yahay midka saxda ah ee Vercel
-// server.use(cors({
-//   origin: "https://tech-blogs-somalia.vercel.app", 
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   allowedHeaders: ["Content-Type", "Authorization"]
-// }));
+
 
 server.use(cors({
   origin: "https://tech-blogs-somalia-wqj9.vercel.app", // URL-kaaga cusub geli halkan
