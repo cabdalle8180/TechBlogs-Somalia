@@ -83,7 +83,7 @@ const server = express();
 
 
 server.use(cors({
-  origin: "https://tech-blogs-somalia-wqj9.vercel.app", // URL-kaaga cusub geli halkan
+  origin: "https://tech-blogs-somalia-6e1i.vercel.app/", // URL-kaaga cusub geli halkan
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
