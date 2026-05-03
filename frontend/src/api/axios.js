@@ -12,9 +12,9 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // Tani waxay soo qaadanaysaa URL-ka aad Vercel gelisay
-  baseURL: import.meta.env.VITE_API_URL + "/api", 
+  baseURL: import.meta.env.VITE_API_URL, // Tani waxay si toos ah u akhrinaysaa URL-ka kore
   withCredentials: true 
 });
 
-export default API;
+// Markaad codsi (request) samaynayso:
+// API.get("/posts") waxay noqonaysaa: https://...railway.app/api/posts
