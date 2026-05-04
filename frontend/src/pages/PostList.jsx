@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import API_BASE from "../lib/api";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -16,7 +17,7 @@ function PostList() {
       if (!currentUser?.username) return;
       try {
         setLoading(true);
-        const res = await fetch(`/api/posts/user/${currentUser.username}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/posts/user/${currentUser.username}`, { credentials: "include" });
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to fetch posts");
         setPosts(Array.isArray(data) ? data : data.posts || []);
@@ -32,7 +33,7 @@ function PostList() {
   const handleDeletePost = async (id) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      const res = await fetch(`/api/posts/${id}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`${API_BASE}/posts/${id}`, { method: "DELETE", credentials: "include" });
       if (!res.ok) throw new Error("Delete failed");
       setPosts((prev) => prev.filter((post) => post._id !== id));
       toast.success("Post deleted successfully");

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import API_BASE from "../lib/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import RichTextEditor from "../components/RichTextEditor";
@@ -24,7 +25,7 @@ function Editpost() {
     async function load() {
       try {
         setLoading(true);
-        const res = await fetch(`/api/posts/${id}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/posts/${id}`, { credentials: "include" });
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load post");
         const p = data?.post;
@@ -65,7 +66,7 @@ function Editpost() {
     }
     try {
       setSaving(true);
-      const res = await fetch(`/api/posts/${id}`, {
+      const res = await fetch(`${API_BASE}/posts/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

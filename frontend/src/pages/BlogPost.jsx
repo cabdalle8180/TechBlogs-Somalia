@@ -79,6 +79,7 @@
 
 
 import { useEffect, useState } from "react";
+import API_BASE from "../lib/api";
 import { Link, useParams } from "react-router-dom";
 import { sanitizeHtml } from "../lib/sanitizeHtml";
 
@@ -94,7 +95,7 @@ function BlogPost() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`/api/posts/${id}`);
+        const res = await fetch(`${API_BASE}/posts/${id}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load post");
         if (!cancelled) setPost(data?.post || null);

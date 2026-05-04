@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import API_BASE from '../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import RichTextEditor from '../components/RichTextEditor';
@@ -38,7 +39,7 @@ function CreatePost() {
     }
     try {
       setSubmitting(true);
-      const res = await fetch("/api/posts/create", {
+      const res = await fetch(`${API_BASE}/posts/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

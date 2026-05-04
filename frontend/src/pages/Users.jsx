@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import API_BASE from "../lib/api";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -14,7 +15,7 @@ function Users() {
     if (!currentUser?.isAdmin) return; 
     try {
       setLoading(true);
-      const res = await fetch("/api/users/getAllUsers", { credentials: "include" });
+      const res = await fetch(`${API_BASE}/users/getAllUsers`, { credentials: "include" });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "Waan ku guuldareysan nay inaan keeno users-ka");
       setUsers(data?.data || []);
@@ -32,7 +33,7 @@ function Users() {
   // Shaqadan waxay qabataa labadii shaqo ee hore (Update Role & Status)
   const handleUpdate = async (id, updates) => {
     try {
-      const res = await fetch(`/api/users/updateUserRole/${id}`, {
+      const res = await fetch(`${API_BASE}/users/updateUserRole/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -51,7 +52,7 @@ function Users() {
   const handleDelete = async (id) => {
     if (!window.confirm("Ma hubtaa inaad tirtirto user-kan?")) return;
     try {
-      const res = await fetch(`/api/users/deleteUser/${id}`, {
+      const res = await fetch(`${API_BASE}/users/deleteUser/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

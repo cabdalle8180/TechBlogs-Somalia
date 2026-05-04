@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import API_BASE from "../../lib/api";
 
 // 1. Register Action
 export const register = createAsyncThunk("user/register", async (userInfo, { rejectWithValue }) => {
     try {
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch(`${API_BASE}/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -20,7 +21,7 @@ export const register = createAsyncThunk("user/register", async (userInfo, { rej
 // 2. Login Action
 export const login = createAsyncThunk("user/login", async (userInfo, { rejectWithValue }) => {
     try {
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch(`${API_BASE}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -37,7 +38,7 @@ export const login = createAsyncThunk("user/login", async (userInfo, { rejectWit
 // 3. Logout Action
 export const logout = createAsyncThunk("user/logout", async (userInfo, { rejectWithValue }) => {
     try {
-        const response = await fetch("/api/auth/logout", {
+        const response = await fetch(`${API_BASE}/auth/logout`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -58,7 +59,7 @@ export const logout = createAsyncThunk("user/logout", async (userInfo, { rejectW
 
 export const getUserProfile = createAsyncThunk("user/getUserProfile", async (_, { rejectWithValue }) => {
     try {
-        const res = await fetch("/api/users/getUserProfile", {
+        const res = await fetch(`${API_BASE}/users/getUserProfile`, {
             method: "GET",
             credentials: "include",
         });
@@ -76,7 +77,7 @@ export const updateUserProfile = createAsyncThunk(
   "user/updateUserProfile",
   async (userInfo, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/users/updateUserProfile", {
+      const res = await fetch(`${API_BASE}/users/updateUserProfile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +104,7 @@ export const updateUserProfile = createAsyncThunk(
 // getAllUsers
 export const getAllUsers = createAsyncThunk("user/getAllUsers", async (userInfo, { rejectWithValue }) => {
     try {
-        const res = await fetch("/api/users/getAllUsers", {
+        const res = await fetch(`${API_BASE}/users/getAllUsers`, {
             method: "GET",
             credentials: "include",
         });

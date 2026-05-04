@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import API_BASE from "../lib/api";
 import { Link } from "react-router-dom";
 import { stripHtml } from "../lib/sanitizeHtml";
 
@@ -18,7 +19,7 @@ function Blogs() {
         const params = new URLSearchParams();
         if (q.trim()) params.set("q", q.trim());
         if (category.trim()) params.set("category", category.trim());
-        const url = params.toString() ? `/api/posts?${params.toString()}` : "/api/posts";
+        const url = params.toString() ? `${API_BASE}/posts?${params.toString()}` : `${API_BASE}/posts`;
         const res = await fetch(url);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load posts");

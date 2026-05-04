@@ -85,9 +85,6 @@ export const updatePost = async (req,res) => {
             return res.status(404).json({ message: "Post not found" });
         }
         if (post.author.toString() !== userId) {
-            // #region agent log
-            fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H5',location:'backend/controller/post.js:updatePost:forbidden',message:'update blocked: not owner',data:{postId:id,postAuthor:post.author?.toString(),userId},timestamp:Date.now()})}).catch(()=>{});
-            // #endregion
             return res.status(403).json({ message: "You are not the author of this post" });
         }
         if (!title && !category && !content && !image) {
@@ -125,9 +122,6 @@ export const deletePost = async (req,res) => {
         }
 
         if (post.author.toString() !== userId){
-            // #region agent log
-            fetch('http://127.0.0.1:7782/ingest/f9c8f8e5-9fd8-4836-9d96-bd07e83be4eb',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'de2eb2'},body:JSON.stringify({sessionId:'de2eb2',runId:'pre-fix',hypothesisId:'H5',location:'backend/controller/post.js:deletePost:forbidden',message:'delete blocked: not owner',data:{postId:id,postAuthor:post.author?.toString(),userId},timestamp:Date.now()})}).catch(()=>{});
-            // #endregion
             return res.status(403).json({ message: "You are not the author of this post" });
         }
 
