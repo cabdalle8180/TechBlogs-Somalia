@@ -19,7 +19,7 @@ const server = express();
 
 // Allow both the canonical Vercel domain and any preview deployment
 const allowedOrigins = [
-  "https://tech-blogs-somalia-wqj9.vercel.app",
+  "https://tech-blogs-somalia-re2b.vercel.app",
   "http://localhost:5173"
 ];
 
