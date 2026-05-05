@@ -158,7 +158,11 @@ res.status(200).json({
 
 export const logout = (req, res) => {
   try {
-    res.clearCookie("access_token");
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true
+    });
 
     res.status(200).json({
       success: true,
