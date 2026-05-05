@@ -50,6 +50,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://dazzling-spontaneity-production-04e3.up.railway.app/api/posts",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

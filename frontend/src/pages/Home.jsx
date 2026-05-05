@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import API_BASE from "../lib/api";
 import { stripHtml } from "../lib/sanitizeHtml";
 
 function Home() {
@@ -12,7 +13,7 @@ function Home() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch("/api/posts");
+        const res = await fetch(`${API_BASE}/posts`);
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load posts");
         const postsData = Array.isArray(data) ? data : data.posts || [];

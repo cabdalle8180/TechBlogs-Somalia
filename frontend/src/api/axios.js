@@ -15,6 +15,3 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // Tani waxay si toos ah u akhrinaysaa URL-ka kore
   withCredentials: true 
 });
-
-// Markaad codsi (request) samaynayso:
-// API.get("/posts") waxay noqonaysaa: https://...railway.app/api/posts
