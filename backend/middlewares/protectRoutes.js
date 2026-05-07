@@ -3,7 +3,14 @@ import jwt from "jsonwebtoken";
 
 const protectRoutes = async (req, res, next) => {
   try {
-    const token = req.cookies.access_token;
+    const cookieToken = req.cookies?.access_token;
+    const authHeader = req.headers?.authorization;
+    const bearerToken =
+      typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+        ? authHeader.slice("Bearer ".length).trim()
+        : null;
+
+    const token = cookieToken || bearerToken;
 
     if (!token) {
       // #region agent log
