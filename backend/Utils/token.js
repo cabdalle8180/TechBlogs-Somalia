@@ -11,4 +11,6 @@ export const generateTokenAndCookies= (userId, res) => {
         sameSite: "none",
         secure: true
     })
+
+    return token;
 }

@@ -129,8 +129,16 @@ const getInitialUser = () => {
     return null;
 };
 
+const getInitialToken = () => {
+    if (typeof window !== "undefined") {
+        return localStorage.getItem("authToken") || null;
+    }
+    return null;
+};
+
 const initialState = {
     currentUser: getInitialUser(),
+    token: getInitialToken(),
     status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
     error: null
 
@@ -156,8 +164,10 @@ export const userslice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.currentUser = action.payload.data;
+                state.token = action.payload.token || null;
                 state.error = null;
                 localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
+                if (action.payload.token) localStorage.setItem("authToken", action.payload.token);
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = "failed";
@@ -172,8 +182,10 @@ export const userslice = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.currentUser = action.payload.data;
+                state.token = action.payload.token || null;
                 state.error = null;
                 localStorage.setItem("currentUser", JSON.stringify(action.payload.data));
+                if (action.payload.token) localStorage.setItem("authToken", action.payload.token);
             })
             .addCase(register.rejected, (state, action) => {
                 state.status = "failed";
@@ -184,8 +196,10 @@ export const userslice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 state.status = "idle"; // Dib ugu celi idle
                 state.currentUser = null;
+                state.token = null;
                 state.error = null;
                 localStorage.removeItem("currentUser");
+                localStorage.removeItem("authToken");
             })
             .addCase(logout.rejected, (state, action) => {
                 state.status = "failed";

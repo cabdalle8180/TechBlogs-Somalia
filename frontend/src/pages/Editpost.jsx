@@ -4,11 +4,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import RichTextEditor from "../components/RichTextEditor";
 import { TbUpload } from "react-icons/tb";
+import { useSelector } from "react-redux";
 
 function Editpost() {
   const { id } = useParams();
   const navigate = useNavigate();
   const fileInput = useRef(null);
+  const token = useSelector((state) => state.user?.token) || localStorage.getItem("authToken");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -25,7 +27,12 @@ function Editpost() {
     async function load() {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/posts/${id}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/posts/${id}`, {
+          credentials: "include",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load post");
         const p = data?.post;
@@ -68,7 +75,10 @@ function Editpost() {
       setSaving(true);
       const res = await fetch(`${API_BASE}/posts/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: "include",
         body: JSON.stringify(formData),
       });

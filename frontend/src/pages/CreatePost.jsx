@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import RichTextEditor from '../components/RichTextEditor';
 import { TbUpload, TbArrowLeft, TbCircleCheck } from 'react-icons/tb';
+import { useSelector } from 'react-redux';
 
 function CreatePost() {
   const fileInput = useRef(null);
   const navigate = useNavigate();
+  const token = useSelector((state) => state.user?.token) || localStorage.getItem("authToken");
   const [preview, setPreview] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -41,7 +43,10 @@ function CreatePost() {
       setSubmitting(true);
       const res = await fetch(`${API_BASE}/posts/create`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         credentials: "include",
         body: JSON.stringify(formData),
       });

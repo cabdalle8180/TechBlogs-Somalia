@@ -82,9 +82,11 @@ import { useEffect, useState } from "react";
 import API_BASE from "../lib/api";
 import { Link, useParams } from "react-router-dom";
 import { sanitizeHtml } from "../lib/sanitizeHtml";
+import { useSelector } from "react-redux";
 
 function BlogPost() {
   const { id } = useParams();
+  const token = useSelector((state) => state.user?.token) || localStorage.getItem("authToken");
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -95,7 +97,12 @@ function BlogPost() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`${API_BASE}/posts/${id}`);
+        const res = await fetch(`${API_BASE}/posts/${id}`, {
+          credentials: "include",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to load post");
         if (!cancelled) setPost(data?.post || null);

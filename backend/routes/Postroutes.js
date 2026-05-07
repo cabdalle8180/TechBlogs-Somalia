@@ -5,9 +5,9 @@ import protectRoutes from "../middlewares/protectRoutes.js";
 const router = Router();
 
 router.get("/",getAllPosts)
-router.get("/user/:username",getUserPosts)
+router.get("/user/:username",protectRoutes,getUserPosts)
 router.post("/create",protectRoutes,createPost)
-router.get("/:id",getPostById)
+router.get("/:id",protectRoutes,getPostById)
 router.delete("/:id",protectRoutes,deletePost)
 router.put("/:id",protectRoutes,updatePost)
 

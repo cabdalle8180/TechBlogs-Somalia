@@ -8,6 +8,7 @@ import { TbEdit, TbTrash, TbPlus } from "react-icons/tb";
 
 function PostList() {
   const currentUser = useSelector((state) => state.user?.currentUser);
+  const token = useSelector((state) => state.user?.token) || localStorage.getItem("authToken");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +18,12 @@ function PostList() {
       if (!currentUser?.username) return;
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/posts/user/${currentUser.username}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/posts/user/${currentUser.username}`, {
+          credentials: "include",
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
         const data = await res.json();
         if (!res.ok) throw new Error(data?.message || "Failed to fetch posts");
         setPosts(Array.isArray(data) ? data : data.posts || []);
@@ -33,7 +39,13 @@ function PostList() {
   const handleDeletePost = async (id) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      const res = await fetch(`${API_BASE}/posts/${id}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`${API_BASE}/posts/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
       if (!res.ok) throw new Error("Delete failed");
       setPosts((prev) => prev.filter((post) => post._id !== id));
       toast.success("Post deleted successfully");

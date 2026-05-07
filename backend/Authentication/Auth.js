@@ -44,7 +44,7 @@ export const register = async (req, res) =>{
     try {
         if (newUser){
             await newUser.save();
-            generateTokenAndCookies(newUser._id, res);
+            const token = generateTokenAndCookies(newUser._id, res);
         // res.status(201).json({ message: "User registered successfully",
         //     _id: newUser._id,
         //     username: newUser.username,
@@ -65,6 +65,7 @@ export const register = async (req, res) =>{
 
 res.status(201).json({
   success: true,
+  token,
   data: {
     _id: newUser._id,
     username: newUser.username,
@@ -109,7 +110,7 @@ export const login = async (req,res) =>{
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        generateTokenAndCookies(user._id, res);
+        const token = generateTokenAndCookies(user._id, res);
         // res.status(200).json({ message: "Login successful",
         //     data:{
         //     _id: user._id,
@@ -130,6 +131,7 @@ export const login = async (req,res) =>{
 
 res.status(200).json({
   success: true,
+  token,
   data: {
     _id: user._id,
     username: user.username,
