@@ -6,8 +6,8 @@ A full-stack tech blog platform where developers, writers, and tech enthusiasts 
 
 ## 🌐 Live Demo
 
-- Frontend: https://your-frontend-url  
-- Backend: https://your-backend-url  
+- Frontend: https://tech-blogs-somalia-re2b.vercel.ap 
+- Backend: https://dazzling-spontaneity-production-04e3.up.railway.app/api/posts
 
 ---
 
